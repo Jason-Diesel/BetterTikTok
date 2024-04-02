@@ -6,8 +6,10 @@ class GameState {
 private:
 
 protected:
-	static const int HEIGHT = 810;
-	static const int WIDTH = 1440;
+	static const int WIDTH = 1920;
+	static const int HEIGHT = 1080;
+	//static const int WIDTH = 1080;
+	//static const int HEIGHT = 1920;
 	sf::RenderWindow window;
 	bool done = false;
 public:

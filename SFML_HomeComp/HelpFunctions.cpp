@@ -10,3 +10,8 @@ float getLenght(const sf::Vector2f& a, const sf::Vector2f& b)
 {
     return sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
 }
+
+float DotProduct(const sf::Vector2f& a, const sf::Vector2f& b)
+{
+    return a.x * b.x + a.y * b.y;
+}

@@ -11,6 +11,8 @@ public:
 	State update(float dt);
 	void render();
 private:
+	bool stopDrawing;
+	bool pressed;
 	BounceBall bounceRec;
 	std::vector<Wall> walls;
 };

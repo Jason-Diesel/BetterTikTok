@@ -10,10 +10,13 @@ public:
 	sf::Vector2f getPosition() const;
 	sf::Vector2f getSize() const;
 	float getRadius() const;
+	void setColor(sf::Color color);
+	void setHitBoxSize(float width, float height);
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 private:
 	sf::RectangleShape shape;
+	sf::RectangleShape HitBox;
 	float radius;
 	sf::Vector2f normal;
 };

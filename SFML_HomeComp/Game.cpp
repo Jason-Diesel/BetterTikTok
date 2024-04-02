@@ -1,18 +1,19 @@
 #include "Game.h"
 
 Game::Game():
-bounceRec(sf::Vector2f(WIDTH / 2, HEIGHT / 2), sf::Vector2f(50,50), sf::Vector2f(0, 10))
+bounceRec(sf::Vector2f(WIDTH / 2, HEIGHT / 2), sf::Vector2f(50,50), sf::Vector2f(700/2, 650/2)),
+pressed(false),
+stopDrawing(false)
 {
 	//TODO : change these so it's right with bounceRec
-	//walls.push_back(Wall(sf::Vector2f(0, HEIGHT/2), sf::Vector2f(20, HEIGHT)));
-	//walls.push_back(Wall(sf::Vector2f(WIDTH, HEIGHT/2), sf::Vector2f(20, HEIGHT)));
-	//walls.push_back(Wall(sf::Vector2f(WIDTH/2, 0), sf::Vector2f(WIDTH, 20)));
-	//walls.push_back(Wall(sf::Vector2f(WIDTH/4 - 20, HEIGHT - 200), sf::Vector2f(WIDTH/2 - 50, 50)));
-	//walls.push_back(Wall(sf::Vector2f(WIDTH/4 * 3 + 20, HEIGHT - 200), sf::Vector2f(WIDTH / 2 - 50, 50)));
+	walls.push_back(Wall(sf::Vector2f(0, HEIGHT/2), sf::Vector2f(20, HEIGHT), sf::Vector2f(1,0)));
+	walls.push_back(Wall(sf::Vector2f(WIDTH, HEIGHT/2), sf::Vector2f(20, HEIGHT), sf::Vector2f(-1, 0)));
+	walls.push_back(Wall(sf::Vector2f(WIDTH/2, 0), sf::Vector2f(WIDTH, 20), sf::Vector2f(0, 1)));
 
-	//Test wall
-	walls.push_back(Wall(sf::Vector2f(WIDTH/2, 600), sf::Vector2f(30,30)));
+	walls.push_back(Wall(sf::Vector2f(WIDTH/4 - 20, HEIGHT - 200 - 12.5), sf::Vector2f(WIDTH/2 - 50, 25), sf::Vector2f(0, -1)));
+	walls.push_back(Wall(sf::Vector2f(WIDTH/4 * 3 + 20, HEIGHT - 200 - 12.5), sf::Vector2f(WIDTH / 2 - 50, 25), sf::Vector2f(0, -1)));
 
+	walls.push_back(Wall(sf::Vector2f(WIDTH / 2, HEIGHT), sf::Vector2f(WIDTH, 20), sf::Vector2f(0, 1)));
 }
 
 Game::~Game()
@@ -26,16 +27,22 @@ State Game::update(float dt)
 		return State::EXIT;
 	}
 	//Move Check BounceRec
-	static bool pressed = false;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F) && !pressed)
+	if (pressed)
+	{
+		bounceRec.update(dt);
+		bounceRec.checkCollisionWithWalls(walls, window);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F))
 	{
 		pressed = true;
-		bounceRec.update(dt);
-		bounceRec.checkCollisionWithWalls(walls);
 	}
-	if (!sf::Keyboard::isKeyPressed(sf::Keyboard::F))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
 	{
-		pressed = false;
+		stopDrawing = true;
+	}
+	else
+	{
+		stopDrawing = false;
 	}
 
 	return State::NO_CHANGE;
@@ -43,14 +50,20 @@ State Game::update(float dt)
 
 void Game::render()
 {
-	window.clear();
-
-	for (int i = 0; i < walls.size(); i++)
+	if (!pressed)
 	{
- 		window.draw(walls[i]);
+		window.clear(sf::Color::Black);
 	}
-	window.draw(bounceRec);
 
-	window.display();
+	if (!stopDrawing)
+	{
+		for (int i = 0; i < walls.size(); i++)
+		{
+			window.draw(walls[i]);
+		}
+		window.draw(bounceRec);
+
+		window.display();
+	}
 }
 
